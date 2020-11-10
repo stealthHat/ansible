@@ -1,0 +1,9 @@
+[master]
+192.168.0.38 ansible_user=ubuntu
+
+[etcd]
+192.168.0.24 ansible_user=ubuntu
+
+[workers]
+192.168.0.54 ansible_user=ubuntu
+192.168.0.60 ansible_user=ubuntu
