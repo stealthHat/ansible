@@ -35,7 +35,7 @@
       - docker-ce-cli 
       - containerd.io
 
-  - name: Add vagrant user to docker group
+  - name: Add {{ host_user }} user to docker group
     user:
-      name: ubuntu
+      name: {{ host_user }}
       group: docker
