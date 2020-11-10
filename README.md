@@ -1,1 +1,1 @@
-Small ansible playbook with kubespray for my cluster.
+Small ansible playbook for my cluster.
