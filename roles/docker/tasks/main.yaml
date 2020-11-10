@@ -18,6 +18,8 @@
       - docker-ce 
       - docker-ce-cli 
       - containerd.io
+    notify:
+      - docker status
 
   - name: Add {{ host_user }} user to docker group
     user:
