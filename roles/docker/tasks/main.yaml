@@ -1,28 +1,62 @@
-- name: Add an apt signing key for Docker
-    apt_key:
-      url: https://download.docker.com/linux/ubuntu/gpg
-      state: present
+---
+- name: Install docker dependencies
+  apt:
+    name: {{ item }}
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg-agent
+    - software-properties-common
 
-  - name: Add apt repository for stable version
-    apt_repository:
-      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
-      state: present
+- name: Add docker repo apt key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    state: present
+  register: add_repository_key
+  ignore_errors: true
 
-  - name: Install docker and its dependecies
-    apt: 
-      name: "{{ packages }}"
-      state: present
-      update_cache: yes
+- name: Add Docker repository
+  apt_repository:
+    repo: {{ docker_apt_repository }}
+    state: present
+    update_cache: yes
+
+- name: Install docker
+  apt:
+    name: "{{ packages }}"
+    state: present 
+    update_cache: yes
     vars:
       packages:
-      - docker-ce 
-      - docker-ce-cli 
-      - containerd.io
-    notify:
-      - docker status
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
 
-  - name: Add {{ host_user }} user to docker group
-    user:
-      name: {{ host_user }}
-      group: docker
+- name: Enable docker systemd service
+  service:
+    name: docker
+    state: started
+    enabled: yes
 
+- name: Prepare default daemon configuration
+  copy:
+    src: daemon.json
+    dest: "/etc/docker/daemon.json"
+
+- name: Set periodic docker system prune
+  cron:
+    name: docker-prune
+    minute: 0
+    hour: "*/2"
+    job: docker container prune -f
+
+- name: Add users to docker group
+  user:
+    name: {{ item }}
+    groups: docker
+    append: yes
+  with_items: {{ docker_group_members }}
+  when: docker_group_members is defined
