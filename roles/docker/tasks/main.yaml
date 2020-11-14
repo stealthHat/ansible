@@ -1,9 +1,11 @@
 ---
 - name: Install docker dependencies
   apt:
-    name: {{ item }}
+    name: "{{ packages }}"
     state: present
-  with_items:
+    update_cache: yes
+  vars:
+    packages:
     - apt-transport-https
     - ca-certificates
     - curl
@@ -13,23 +15,20 @@
 - name: Add docker repo apt key
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
-    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
     state: present
   register: add_repository_key
-  ignore_errors: true
 
 - name: Add Docker repository
   apt_repository:
-    repo: {{ docker_apt_repository }}
+    repo: "{{ docker_apt_repository }}"
     state: present
-    update_cache: yes
 
 - name: Install docker
   apt:
     name: "{{ packages }}"
     state: present 
     update_cache: yes
-    vars:
+  vars:
       packages:
         - docker-ce
         - docker-ce-cli
@@ -44,19 +43,18 @@
 - name: Prepare default daemon configuration
   copy:
     src: daemon.json
-    dest: "/etc/docker/daemon.json"
+    dest: /etc/docker/daemon.json
 
 - name: Set periodic docker system prune
   cron:
     name: docker-prune
-    minute: 0
+    minute: "0"
     hour: "*/2"
     job: docker container prune -f
 
 - name: Add users to docker group
   user:
-    name: {{ item }}
+    name: "{{ docker_group_members }}"
     groups: docker
     append: yes
-  with_items: {{ docker_group_members }}
   when: docker_group_members is defined
