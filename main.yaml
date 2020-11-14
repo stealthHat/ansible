@@ -4,3 +4,13 @@
   roles:
     - docker 
     - nodes
+
+- hosts: master
+  become: true 
+  roles: 
+    - master
+
+- hosts: worker 
+  become: true 
+  roles:
+    - worker
