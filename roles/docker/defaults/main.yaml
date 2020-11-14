@@ -1,3 +1,4 @@
+---
 docker_apt_repository: "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
 
 docker_group_members: ubuntu
