@@ -1,0 +1,5 @@
+---
+k8s_advertise_address: 192.168.50.10
+k8s_network_cidr: 192.168.0.0/16
+
+token_file: join_token
