@@ -10,7 +10,6 @@
     - ca-certificates
     - curl
     - software-properties-common
-    - gnupg-agent
     - gnupg2
 
 - name: Add docker repo apt key
@@ -34,17 +33,30 @@
         - docker-ce
         - docker-ce-cli
         - containerd.io
+  notify:
+    - Start Docker 
 
-- name: Enable docker systemd service
-  service:
-    name: docker
-    state: started
-    enabled: yes
+- name: Create systemd configuration directory for Docker service (systemd)
+  file:
+    dest: /etc/systemd/system/docker.service.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
 
 - name: Prepare default daemon configuration
   copy:
     src: daemon.json
     dest: /etc/docker/daemon.json
+
+- name: Ensure docker daemon options used (systemd)
+  lineinfile:
+    dest: /lib/systemd/system/docker.service
+    regexp: "ExecStart=/usr/bin/docker daemon -H fd://"
+    line: ExecStart=/usr/bin/docker daemon -H fd:// $DOCKER_OPTS
+  notify:
+    - Reload systemd
+    - Restart docker
 
 - name: Set periodic docker system prune
   cron:
