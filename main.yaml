@@ -1,12 +1,12 @@
 ---
 - hosts: all
-  become: true
+  become: yes
   roles:
     - docker 
     - nodes
 
 - hosts: master
-  become: true 
+  become: yes
   roles: 
     - master
 
