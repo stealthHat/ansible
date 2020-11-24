@@ -1,9 +1,9 @@
 ---
-- name: Start Docker
-  service: name=docker state=started
-
-- name: Reload systemd
+- name: reload systemd
   command: systemctl daemon-reload  
 
-- name: Restart docker
+- name: restart docker
   service: name=docker state=restarted
+
+- name: enable docker
+  service: name=docker enabled=yes
