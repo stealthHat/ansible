@@ -11,30 +11,37 @@
     - curl
     - software-properties-common
     - gnupg2
+    - gnupg-agent
 
 - name: Add docker repo apt key
   apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
+    url: "{{ docker_apt_key }}"
     state: present
-  register: add_repository_key
 
 - name: Add Docker repository
   apt_repository:
     repo: "{{ docker_apt_repository }}"
     state: present
 
+- name: apt-get update 
+  apt: 
+    update_cache: yes 
+    upgrade: safe
+
 - name: Install docker
-  apt:
+  package:
     name: "{{ packages }}"
     state: present 
-    update_cache: yes
   vars:
-      packages:
-        - docker-ce
-        - docker-ce-cli
-        - containerd.io
-  notify:
-    - Start Docker 
+    packages:
+    - docker-ce 
+    - docker-ce-cli 
+    - containerd.io
+
+- name: Prepare default daemon configuration
+  copy:
+    src:  ../files/daemon.json
+    dest: /etc/docker/daemon.json
 
 - name: Create systemd configuration directory for Docker service (systemd)
   file:
@@ -43,20 +50,10 @@
     owner: root
     group: root
     mode: 0755
-
-- name: Prepare default daemon configuration
-  copy:
-    src: daemon.json
-    dest: /etc/docker/daemon.json
-
-- name: Ensure docker daemon options used (systemd)
-  lineinfile:
-    dest: /lib/systemd/system/docker.service
-    regexp: "ExecStart=/usr/bin/docker daemon -H fd://"
-    line: ExecStart=/usr/bin/docker daemon -H fd:// $DOCKER_OPTS
-  notify:
-    - Reload systemd
-    - Restart docker
+  notify: 
+    - reload systemd
+    - restart docker
+    - enable docker
 
 - name: Set periodic docker system prune
   cron:

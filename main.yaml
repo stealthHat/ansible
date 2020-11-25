@@ -10,7 +10,7 @@
   roles: 
     - master
 
-- hosts: worker 
-  become: true 
-  roles:
-    - worker
+    #- hosts: worker 
+    #  become: true 
+    #  roles:
+    #    - worker

@@ -39,8 +39,9 @@
     update_cache: yes
   vars:
     packages:
-      - kubelet 
-      - kubeadm 
+      - kubelet
+      - kubeadm
       - kubectl
   notify:
     - restart kubelet
+    - enable kubelet

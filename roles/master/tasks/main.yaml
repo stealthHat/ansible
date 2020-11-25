@@ -1,6 +1,6 @@
 ---
 - name: Initializing Kubernetes cluster
-  shell: kubeadm init --apiserver-advertise-address {{ k8s_advertise_address }} --pod-network-cidr={{ k8s_network_cidr }}
+  shell: kubeadm init  --pod-network-cidr={{ k8s_network_cidr }}
   register: output
 
 - name: Storing Logs and Generated token for future purpose.
@@ -12,5 +12,7 @@
    sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
    sudo chown $(id -u):$(id -g) $HOME/.kube/config
      
-- name: Install calico pod network
-  command: kubectl create -f https://docs.projectcalico.org/v3.4/getting-started/kubernetes/installation/hosted/calico.yaml
+- name: Configure Calico networking.
+  command: "{{ item }}"
+  with_items:
+    - kubectl apply -f {{ kubernetes_calico_manifest_file }}
