@@ -23,12 +23,12 @@
 
 - name: Add an apt signing key for Kubernetes
   apt_key:
-    url: {{ k8s_signing_key }}
+    url: "{{ k8s_signing_key }}"
     state: present
 
 - name: Adding apt repository for Kubernetes
   apt_repository:
-    repo: {{ apt_k8s_key }} 
+    repo: "{{ apt_k8s_key }} "
     state: present
     filename: kubernetes.list
 

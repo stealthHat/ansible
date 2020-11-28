@@ -6,6 +6,13 @@
 - name: Storing Logs and Generated token for future purpose.
   local_action: copy content="{{ output.stdout }}" dest="{{ token_file }}"
 
+- name: Copy Kubeconfig to local
+  become: yes
+  fetch:
+    src: /etc/kubernetes/admin.conf 
+    dest: ~/.kube/config
+    flat: yes
+    
 - name: Copying required files
   shell: |
    mkdir -p $HOME/.kube
