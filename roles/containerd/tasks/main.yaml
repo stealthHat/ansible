@@ -1,0 +1,49 @@
+---
+- name: Setup required containerd params
+  copy:
+    src:  ../files/containerd.conf
+    dest: /etc/modules-load.d/containerd.conf
+
+- name: modprob
+  shell: |
+    modprobe overlay
+    modprobe br_netfilter
+
+- name: Setup required sysctl params, these persist across reboots
+  copy:
+    src:  ../files/99-kubernetes-cri.conf
+    dest: /etc/sysctl.d/99-kubernetes-cri.conf
+
+- name: sysctl
+  shell: sudo sysctl --system
+
+- name: Install containerd
+  package:
+    name: "{{ packages }}"
+    state: present 
+  vars:
+    packages:
+    - containerd
+
+- name: Ensure containerd is started and enabled at boot.
+  service:
+    name: containerd
+    state: "{{ containerd_service_state }}"
+    enabled: "{{ containerd_service_enabled }}"
+
+- name: Ensure containerd config directory exists.
+  file:
+    path: /etc/containerd
+    state: directory
+  register: containerd_dir
+
+- name: Get defaults from containerd.
+  command: containerd config default
+  changed_when: false
+  register: containerd_config_default
+
+- name: Write defaults to config.toml.
+  copy:
+    dest: /etc/containerd/config.toml
+    content: "{{ containerd_config_default.stdout }}"
+  notify: Reboot
