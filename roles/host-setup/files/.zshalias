@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#my alias
+alias \
+  l='ls -lha --color=auto' \
+  ls='ls --color=auto' \
+  grep='grep --color=auto' \
+	diff='diff --color=auto' \
+  ap='ansible-playbook' \
+  d='sudo docker' \
+  sc='sudo systemctl' \
+  diff='diff --color=auto' \
+  k='kubectl' \
+  sc='sudo systemctl' \
+  h='helm' \
+  j='journalctl' \

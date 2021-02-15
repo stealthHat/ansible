@@ -1,0 +1,33 @@
+---
+- name: Set hostname to inventory hostname
+  hostname: 
+    name: "{{inventory_hostname}}"
+
+- name: Set hosts file
+  lineinfile:
+    path: /etc/hosts
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+    state: present
+  with_items:
+    - { regexp: '127\.0\.1\.1.*', line: '127.0.1.1 {{ ansible_hostname }}' }
+
+- name: Ensure GB-UTF8 locale exists
+  locale_gen:
+    name: en_GB.UTF-8
+    state: present
+
+- name: Copy Alias to Host
+  copy:
+    src:  ../files/.zshalias
+    dest: /home/ubuntu/.zshalias
+
+- name: Source de Alias
+  shell: echo source /home/ubuntu/.zshalias >> /home/ubuntu/.profile
+
+- name: Update and Upgrade system
+  apt:
+    autoremove: yes
+    update_cache: yes
+    upgrade: dist
+  notify: Reboot
