@@ -1,14 +1,15 @@
 ---
-#- hosts: all
-#  become: yes
-#  roles:
-#    - docker 
-#    - nodes
+- hosts: all
+  become: yes
+  roles:
+    - host-setup
+    - containerd 
+    - nodes
 
-#- hosts: master
-#  become: yes
-#  roles: 
-#    - master
+- hosts: master
+  become: yes
+  roles: 
+    - master
 
 - hosts: worker 
   become: true 

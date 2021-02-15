@@ -1,10 +1,8 @@
 [all]
-192.168.0.13 ansible_user=ubuntu
-192.168.0.56 ansible_user=ubuntu
+sun 
 
 [master]
-192.168.0.13 ansible_user=ubuntu
+sun 
 
 [worker]
-192.168.0.56 ansible_user=ubuntu
 
