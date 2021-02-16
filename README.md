@@ -4,7 +4,7 @@
 
 ## Roles
  - host-setup: Makes the basic configuration of the system
- - containerd: install containerd as the container runtime of k8s 
+ - containerd: Install containerd as the container runtime of k8s 
  - nodes: Makes the changes needed to run k8s on ubuntu arm64
  - master: Install de k8s service and configure the control plane
  - worker: Adds nodes to the control plane 
