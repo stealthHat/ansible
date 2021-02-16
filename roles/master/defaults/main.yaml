@@ -1,6 +1,6 @@
 ---
 k8s_network_cidr: 192.168.15.0/16
 
-kubernetes_calico_manifest_file: https://docs.projectcalico.org/v3.17/manifests/calico.yaml
+kubernetes_calico_manifest_file: https://docs.projectcalico.org/manifests/calico.yaml
 
 token_file: $HOME/.kube/join_token

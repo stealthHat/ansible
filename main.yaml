@@ -1,17 +1,15 @@
 ---
 - hosts: all
-  become: yes
+  become: true
   roles:
     - host-setup
     - containerd 
     - nodes
 
 - hosts: master
-  become: yes
   roles: 
     - master
 
 - hosts: worker 
-  become: true 
   roles:
     - worker
