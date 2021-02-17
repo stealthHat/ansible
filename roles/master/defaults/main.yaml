@@ -1,6 +1,5 @@
 ---
-k8s_network_cidr: 192.168.15.0/16
-
-kubernetes_calico_manifest_file: https://docs.projectcalico.org/manifests/calico.yaml
+k8s_network_cidr: 10.32.0.0/12
+k8s_apiserver: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 
 token_file: $HOME/.kube/join_token

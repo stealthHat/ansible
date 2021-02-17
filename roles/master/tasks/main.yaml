@@ -1,25 +1,17 @@
 ---
-- name: Copying required files
-  become: yes
-  shell: |
-   mkdir -p $HOME/.kube
-   sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
-   sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
 - name: Initializing Kubernetes cluster
-  shell: kubeadm init  --pod-network-cidr={{ k8s_network_cidr }}
+  become: true
+  shell: kubeadm init --pod-network-cidr={{ k8s_network_cidr }} --apiserver-advertise-address={{ k8s_apiserver }}
   register: output
-
-- name: Storing Logs and Generated token for future purpose.
+  
+- name: storing logs and generated token for future purpose.
   local_action: copy content="{{ output.stdout }}" dest="{{ token_file }}"
-
-- name: Configure Calico networking
-  command: "{{ item }}"
-  with_items:
-    - kubectl apply -f {{ kubernetes_calico_manifest_file }}
+ 
+- name: configure k8s and weave cni
+  script: ../files/k8s-config.sh 
 
 - name: Copy Kubeconfig to local
-  become: yes
+  become: true
   fetch:
     src: /etc/kubernetes/admin.conf
     dest: ~/.kube/config
