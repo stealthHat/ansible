@@ -29,5 +29,6 @@
   apt:
     autoremove: yes
     update_cache: yes
-    upgrade: dist
+    upgrade: full
+  retries: 100
   notify: Reboot
