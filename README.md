@@ -1,4 +1,4 @@
-# Small ansible playbook for my cluster.
+# Small ansible repository for my cluster.
 
   Im running this k8s cluster on a raspberry pi using ubuntu server [arm64](https://ubuntu.com/download/server/arm)
 
