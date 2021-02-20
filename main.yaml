@@ -2,13 +2,15 @@
 - hosts: all
   become: true
   roles:
-    - host-setup
+    - common
     - containerd 
-    - nodes
+    - common-nodes
 
 - hosts: master
   roles: 
     - master
+    - role: helm
+      become: true
 
 - hosts: worker 
   roles:

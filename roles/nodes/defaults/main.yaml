@@ -1,2 +1,0 @@
-k8s_signing_key: https://packages.cloud.google.com/apt/doc/apt-key.gpg 
-apt_k8s_key: deb https://apt.kubernetes.io/ kubernetes-xenial main
