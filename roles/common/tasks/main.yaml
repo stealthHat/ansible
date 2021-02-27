@@ -12,13 +12,8 @@
   with_items:
     - { regexp: '127\.0\.1\.1.*', line: '127.0.1.1 {{ ansible_hostname }}' }
 
-- name: set timezone
-  command: "/usr/bin/timedatectl set-timezone America/Sao_paolo"
-  when: common_timezone not in timedatectl_result.stdout_lines[0]
-
 - name: enable ntp
-  command: /usr/bin/timedatectl set-ntp true
-  when: "'NTP=no' in timedatectl_result.stdout"
+  command: timedatectl set-ntp true
 
 - name: start time services
   service:

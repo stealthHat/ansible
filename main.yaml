@@ -9,8 +9,7 @@
 - hosts: master
   roles: 
     - master
-    - role: helm
-      become: true
+    - helm
 
 - hosts: worker 
   roles:

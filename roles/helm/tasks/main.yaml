@@ -16,10 +16,3 @@
   apt:
     name: helm
     update_cache: yes
-
-- name: Deploy ingres nginx
-  community.kubernetes.helm:
-    name: ingress-nginx
-    chart_ref: ingress-nginx/ingress-nginx
-    release_namespace: ingress-nginx
-    create_namespace: true
