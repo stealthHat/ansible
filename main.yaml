@@ -9,7 +9,7 @@
 - hosts: master
   roles: 
     - master
-    - helm
+    - charts
 
 - hosts: worker 
   roles:
